@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-light bg-light">
+        {% if current_user.is_authenticated %}
+            <div>
+                <span class="navbar-brand mr-2">{{ current_user.name }}</span>
+                <a class="btn btn-danger" href="/logout">Выйти</a>
+                <a href="{{ url_for('home')}}">На домашнюю страницу</a>
+            </div>
+        {% else %}
+            <p>
+                <a class="btn btn-primary " href="/register">Зарегистрироваться</a>
+                <a class="btn btn-success" href="/login">Войти</a>
+            </p>
+        {% endif %}
+    </nav>
+</header>
+    {% block content %} {% endblock %}
+</body>
+</html>

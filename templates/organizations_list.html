@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">Мои организации</h4>
+                <a href="{{ url_for('create_organization') }}" class="btn btn-success">
+                    Создать организацию
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            {% if orgs %}
+                <div class="row">
+                    {% for org in orgs %}
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <h5 class="card-title mb-3">{{ org.name }}</h5>
+                                <div class="mb-3">
+                                    <span class="badge bg-primary">
+                                        Событий: {{ org.events_count if org.events_count else 0 }}
+                                    </span>
+                                </div>
+                                <a href="{{ url_for('organization_events', org_id=org.id) }}"
+                                   class="btn btn-primary btn-sm">
+                                    Подробнее
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <h5 class="text-muted mb-4">У вас пока нет организаций</h5>
+                </div>
+            {% endif %}
+        </div>
+        <div class="card-footer text-center">
+            <a href="{{ url_for('home') }}" class="btn btn-secondary">
+                На главную
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

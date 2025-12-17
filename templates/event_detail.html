@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">{{ ev.name }}</h3>
+                        <span class="badge {% if ev.done %}bg-success{% else %}bg-warning{% endif %}">
+                            {% if ev.done %}✅ Проведено{% else %}⏳ Ожидается{% endif %}
+                        </span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% if ev.description %}
+                    <div class="mb-4">
+                        <h5>Описание</h5>
+                        <p class="card-text">{{ ev.description }}</p>
+                    </div>
+                    {% endif %}
+
+                    <div class="row mb-4">
+                        {% if ev.city %}
+                        <div class="col-md-6 mb-3">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h6 class="text-muted">📍 Город</h6>
+                                    <p class="h5">{{ ev.city }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if ev.date %}
+                        <div class="col-md-6 mb-3">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h6 class="text-muted">📅 Дата и время</h6>
+                                    <p class="h5">{{ ev.date.strftime('%d.%m.%Y %H:%M') }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if ev.saint_persons_count is not none %}
+                        <div class="col-md-6 mb-3">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h6 class="text-muted">👥 Участников</h6>
+                                    <p class="h5">{{ ev.saint_persons_count }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if ev.hours %}
+                        <div class="col-md-6 mb-3">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h6 class="text-muted">⏱️ Часы</h6>
+                                    <p class="h5">{{ ev.hours }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    {% if not ev.done %}
+                    <div class="card mb-4 border-primary">
+                        <div class="card-body">
+                            {% if reg %}
+                            <div class="alert alert-success text-center">
+                                <h5>✅ Вы записаны на это мероприятие</h5>
+                            </div>
+                            {% else %}
+                            <form method="POST" action="{{ url_for('register_to_event', event_id=ev.id) }}">
+                                <button type="submit" class="btn btn-success btn-block">
+                                    Записаться на мероприятие
+                                </button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-secondary text-center">
+                        <h5>📋 Мероприятие уже проведено</h5>
+                        <p class="mb-0">Запись на это мероприятие закрыта</p>
+                    </div>
+                    {% endif %}
+
+                    <div class="text-center mt-4">
+                        <a href="{{ url_for('organization_events', org_id=ev.organization_id) }}"
+                           class="btn btn-primary mr-2">
+                            К списку событий организации
+                        </a>
+                        <a href="{{ url_for('events_list') }}" class="btn btn-info mr-2">
+                            Все мероприятия
+                        </a>
+                        <a href="{{ url_for('home') }}" class="btn btn-secondary">
+                            На главную
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

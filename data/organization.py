@@ -16,3 +16,4 @@ class Organization(SqlAlchemyBase, SerializerMixin):
 
     events_list = Column(TEXT, nullable=True)
     events = relationship('Event', back_populates='orgs')
+    events_count = Column(Integer, nullable=True)

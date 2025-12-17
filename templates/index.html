@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="jumbotron">
+    <h1 class="display-4">Добро пожаловать в GoodTime!</h1>
+    <p class="lead">Время творить добро!</p>
+    <hr class="my-4">
+    {% if not current_user.is_authenticated %}
+        <p>Для работы с системой необходимо авторизоваться</p>
+    {% endif %}
+</div>
+{% endblock %}

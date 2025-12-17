@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <h5 class="card-title">Мероприятия</h5>
+                    <p class="card-text display-4">{{ stats.events_count }}</p>
+                    <p class="card-text">всего посещено</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <h5 class="card-title">Часы</h5>
+                    <p class="card-text display-4">{{ stats.hours_count }}</p>
+                    <p class="card-text">всего часов</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card text-white bg-warning">
+                <div class="card-body">
+                    <h5 class="card-title">Организации</h5>
+                    <p class="card-text display-4">{{ stats.orgs_owned }}</p>
+                    <p class="card-text">в вашем управлении</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">Добро пожаловать, {{ current_user.name }} {{ current_user.surname }}!</h4>
+                    <div>
+                        <a href="{{ url_for('events_list') }}" class="btn btn-info mr-2">
+                            Список мероприятий
+                        </a>
+                        <a href="{{ url_for('organizations_list') }}" class="btn btn-success mr-2">
+                            Список организаций
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p>Это ваша домашняя страница. Здесь отображается статистика вашей активности.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
