@@ -249,7 +249,7 @@ def create_event(org_id):
         year, month, day = [int(i) for i in request.form['datetime'].split('T')[0].split('-')]
         hours, minutes = [int(i) for i in request.form['datetime'].split('T')[1].split(':')]
 
-        event.date = datetime(year, month, day, hours, minutes)
+        event.date = datetime.datetime(year, month, day, hours, minutes)
         event.hours = request.form['hours']
         event.organization_id = org_id
         db_sess.add(event)
