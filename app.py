@@ -216,17 +216,19 @@ def organizations_list():
 @login_required
 def organization_events(org_id):
     db_sess = db_session.create_session()
-    org = db_sess.query(Organization).filter(Organization.id == org_id).first()
-    if org.owner_id != current_user.id:
-        db_sess.close()
-        return redirect('/access_denied')
-    events = db_sess.query(Event).filter(Event.organization_id == org_id).all()
-    for ev in events:
-        if ev.date < datetime.datetime.now():
-            ev.done = True
-            db_sess.commit()
+    try:
+        org = db_sess.query(Organization).filter(Organization.id == org_id).first()
+        if org.owner_id != current_user.id:
             db_sess.close()
-    return render_template('organizations_events.html', events=events, org_id=org_id, current_user=current_user)
+            return redirect('/access_denied')
+        events = db_sess.query(Event).filter(Event.organization_id == org_id).all()
+        for ev in events:
+            if ev.date < datetime.datetime.now():
+                ev.done = True
+                db_sess.commit()
+        return render_template('organizations_events.html', events=events, org_id=org_id, current_user=current_user)
+    finally:
+        db_sess.close()
 
 
 @app.route('/access_denied')
