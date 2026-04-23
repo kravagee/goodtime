@@ -20,7 +20,9 @@ app.config['SECRET_KEY'] = '123456'
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = db_session.create_session()
-    return db_sess.query(User).filter(User.id == user_id).first()
+    user = db_sess.query(User).filter(User.id == user_id).first()
+    db_sess.close()
+    return user
 
 
 @app.route('/logout')
@@ -45,7 +47,6 @@ def register():
         surname = request.form['surname']
         last_name = request.form['last_name']
         year, month, day = [int(i) for i in request.form['birthday'].split('-')]
-        print(year, month, day)
         birthday = date(year, month, day)
         password = request.form['password']
         db_sess = db_session.create_session()
@@ -217,12 +218,14 @@ def organization_events(org_id):
     db_sess = db_session.create_session()
     org = db_sess.query(Organization).filter(Organization.id == org_id).first()
     if org.owner_id != current_user.id:
+        db_sess.close()
         return redirect('/access_denied')
     events = db_sess.query(Event).filter(Event.organization_id == org_id).all()
     for ev in events:
         if ev.date < datetime.datetime.now():
             ev.done = True
             db_sess.commit()
+            db_sess.close()
     return render_template('organizations_events.html', events=events, org_id=org_id, current_user=current_user)
 
 
@@ -239,6 +242,7 @@ def create_event(org_id):
         org = db_sess.query(Organization).filter(Organization.id == org_id).first()
 
         if org.owner_id != current_user.id:
+            db_sess.close()
             return redirect('/access_denied')
 
         event = Event()
@@ -279,6 +283,7 @@ def event_detail(event_id):
     if current_user.is_authenticated and current_user.registred_on:
         regst = json.loads(current_user.registred_on)
         reg = True if event_id in regst['id'] else False
+    db_sess.close()
     return render_template('event_detail.html', reg=reg, ev=ev, current_user=current_user)
 
 
